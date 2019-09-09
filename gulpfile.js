@@ -9,7 +9,7 @@ let convertHbsTask = (done) => {
 	gulp.src('./src/templates/pages/*.html')
 		.pipe(panini ({
 			root: './src/templates/pages/',
-			layouts: './src/templates/layouts/',
+			layouts: './src/templates/layout/',
 			partials: './src/templates/partials/',
 			data: './src/data/',
 //			helpers: 'helpers/',
@@ -17,3 +17,6 @@ let convertHbsTask = (done) => {
 		.pipe(gulp.dest('dist/pages'));
 	done();
 }
+
+
+exports.hbs = convertHbsTask;
