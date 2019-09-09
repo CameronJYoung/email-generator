@@ -1,0 +1,16 @@
+{
+	"dev":{
+		"name": "test",
+		"country": "test",
+		"language": "test",
+		"brand": "test",
+		"version": "test"
+	},
+	"build":{
+		"name": "test",
+		"country": "test",
+		"language": "test",
+		"brand": "test",
+		"version": "test"
+	}
+}
