@@ -89,7 +89,7 @@ exports.dev = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssT
 //Build Task
 exports.juice = juicify;
 exports.test = gulp.series(gulp.parallel(convertPaniniTask,convertScssTask));
-exports.build = gulp.series(gulp.parallel(convertPaniniTask,convertScssTask),juicify,moveImagesTask);
+exports.build = gulp.series(gulp.parallel(convertPaniniTask,convertScssTask),juicify);
 
 //Utility Tasks
 exports.clean = clearDist;
