@@ -44,15 +44,20 @@ let movePDFTask = (done) => {
 }
 
 let juicify = (done) => {
-	juice.juiceFile('./dist/pages/example-1.html', {}, (err, html) => {
-		console.log(err);
-		fs.writeFile("./dist/pages/example-1.html", html, (err) => {
-			if(err) {
-				return console.log(err);
-			}
-			console.log("The file was saved!");
+	setTimeout(() => {
+
+		juice.juiceFile('./dist/pages/example-1.html', {}, (err, html) => {
+			console.log(err);
+			fs.writeFile("./dist/pages/example-1.html", html, (err) => {
+				if(err) {
+					return console.log(err);
+				}
+				console.log("The file was saved!");
+			});
 		});
-	});
+
+	}, 100);
+
 	done();
 };
 
@@ -87,8 +92,6 @@ let watchTask = (done) => {
 exports.dev = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask),browserSyncTask,watchTask);
 
 //Build Task
-exports.juice = juicify;
-exports.test = gulp.series(gulp.parallel(convertPaniniTask,convertScssTask));
 exports.build = gulp.series(gulp.parallel(convertPaniniTask,convertScssTask),juicify);
 
 //Utility Tasks
