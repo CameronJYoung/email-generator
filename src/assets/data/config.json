@@ -1,0 +1,15 @@
+{
+	"name": "123",
+	"country": "test",
+	"language": "test",
+	"brand": "Betmiga",
+	"version": "test",
+	"env":{
+		"dev":{
+
+	},
+		"build":{
+
+		}
+	}
+}

@@ -12,9 +12,11 @@
     "browser-sync": "^2.26.7",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
-    "gulp-sass": "^4.0.2"
+    "gulp-sass": "^4.0.2",
+    "inky": "^1.3.7"
   },
   "dependencies": {
+    "juice": "^5.2.0",
     "panini": "^1.6.3"
   }
 }
