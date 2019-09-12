@@ -53,7 +53,7 @@ let juicify = (done) => {
 	setTimeout(() => {
 		juice.juiceFile('./dist/pages/example-1.html', {}, (err, html) => {
 			console.log(err);
-			fs.writeFile(`./dist/pages/${emailName}.html`, html, (err) => {
+			fs.writeFile(`./dist/${emailName}.html`, html, (err) => {
 				if(err) {
 					return console.log(err);
 				}
@@ -63,6 +63,14 @@ let juicify = (done) => {
 	}, 100);
 	done();
 };
+
+let delOldFiles = (done) => {
+	setTimeout(() => {
+		del.sync('./dist/pages');
+		del.sync('./dist/css');
+	}, 200);
+	done();
+}
 
 let clearDist = (done) => {
 	del.sync('./dist');
@@ -95,7 +103,7 @@ let watchTask = (done) => {
 exports.dev = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask),browserSyncTask,watchTask);
 
 //Build Task
-exports.build = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssTask),juicify);
+exports.build = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssTask),juicify,delOldFiles);
 
 //Utility Tasks
 exports.clean = clearDist;
