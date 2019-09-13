@@ -11,9 +11,18 @@ const config = require('./src/assets/data/config');
 //Variables
 
 let emailName = `${config.brand}-${config.country}-${config.language}-${config.type}-${config.name}-${config.version}`;
-
+let emailFileName;
 
 //Tasks
+
+let getName = (done) => {
+	emailFileName = fs.readdirSync('src/templates/pages/');
+	emailFileName = emailFileName.find((element) => {
+		return element.includes('.html');
+	});
+	done();
+}
+
 let convertPaniniTask = (done) => {
 	panini.refresh();
 	gulp.src('./src/templates/pages/*.html')
@@ -51,7 +60,7 @@ let movePDFTask = (done) => {
 
 let juicify = (done) => {
 	setTimeout(() => {
-		juice.juiceFile('./dist/pages/example-1.html', {}, (err, html) => {
+		juice.juiceFile(`./dist/pages/${emailFileName}`, {}, (err, html) => {
 			console.log(err);
 			fs.writeFile(`./dist/${emailName}.html`, html, (err) => {
 				if(err) {
@@ -86,7 +95,7 @@ let browserSyncTask = (done) => {
 	browserSync.init({
 		server: {
 			baseDir: './dist',
-			index: 'pages/example-1.html',
+			index: `pages/${emailFileName}`,
 			notify: false
 		}
 	});
@@ -98,12 +107,11 @@ let watchTask = (done) => {
 	done();
 }
 
-
 //Dev Task
-exports.dev = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask),browserSyncTask,watchTask);
+exports.dev = gulp.series(getName,clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask),browserSyncTask,watchTask);
 
 //Build Task
-exports.build = gulp.series(clearDist,gulp.parallel(convertPaniniTask,convertScssTask),juicify,delOldFiles);
+exports.build = gulp.series(getName,clearDist,gulp.parallel(convertPaniniTask,convertScssTask),juicify,delOldFiles);
 
 //Utility Tasks
 exports.clean = clearDist;
