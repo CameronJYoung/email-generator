@@ -6,6 +6,7 @@ const browserSync = require('browser-sync').create();
 const inky = require('inky');
 const fs = require('fs');
 const juice = require('juice');
+const replace = require('gulp-replace');
 const config = require('./src/assets/data/config');
 
 //Variables
@@ -69,7 +70,7 @@ let juicify = (done) => {
 				console.log("The file was saved!");
 			});
 		});
-	}, 100);
+	}, 150);
 	done();
 };
 
@@ -108,10 +109,10 @@ let watchTask = (done) => {
 }
 
 //Dev Task
-exports.dev = gulp.series(getName,clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask),browserSyncTask,watchTask);
+exports.dev = gulp.series(getName,clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask,movePDFTask),browserSyncTask,watchTask);
 
 //Build Task
-exports.build = gulp.series(getName,clearDist,gulp.parallel(convertPaniniTask,convertScssTask),juicify,delOldFiles);
+exports.build = gulp.series(getName,clearDist,gulp.parallel(convertPaniniTask,convertScssTask,moveImagesTask,movePDFTask),juicify,delOldFiles);
 
 //Utility Tasks
 exports.clean = clearDist;
