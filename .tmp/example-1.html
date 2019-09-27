@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Betmiga - Approved email example</title>
+	<link rel="stylesheet" href="css/betmiga-global.css" data-inline>
+	<link rel="stylesheet" href="css/email.css" data-inline>
+</head>
+<body>
+
+		<table align="center" class="container templateContainer"><tbody><tr><td>
+			<center data-parsed>
+				<table align="center" class="row header float-center"><tbody><tr>
+					<th class="small-12 large-12 columns first last"><table><tr><th>
+						<img src="img/logo.png" class="logo-size">
+					</th>
+<th class="expander"></th></tr></table></th>
+				</tr></tbody></table>
+				<table style="background: white; width: 100%;" align="center" class="row float-center"><tbody><tr>
+					<th class="small-12 large-12 columns first last"><table><tr><th>
+						<p>Dear {{accTitle}} {{accLname}}</p>
+						<p>Thank you for meeting with me {{customText[today|yesterday|last week]}}
+						at your {{customText[office|hospital|practice]}} to discuss your overactive
+						bladder patients’ management and treatment with BETMIGA. </p>
+						<p>Please find links to content we discussed below and some further information that I believe you will find useful.</p>
+						<p>{{insertEmailFragments}}</p>
+						<p>I look forward to seeing you again{{customText[| next week| next month| next quarter]}}{{customText[|
+						at your office| at your hospital| at your practice]}}.</p>
+						<table class="row"><tbody><tr>Full Prescribing Information</tr></tbody></table>
+						<p>Adverse events should be reported. Reporting forms and information can be found at
+						http://www.mhra.gov.uk/yellowcard Adverse events should also be reported to Astellas
+						Pharma Ltd. on 0800 783 5018</p>
+					</th></tr></table></th>
+				</tr></tbody></table>
+				
+			</center>
+		</td></tr></tbody></table>
+
+</body>
+</html>
