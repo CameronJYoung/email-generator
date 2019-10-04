@@ -97,9 +97,6 @@ let browserSyncTask = () => {
 		}
 	});
 
-}
-
-let watchTask = () => {
 	watch('./src').on('change',
 		series(
 			clearTemp,
@@ -124,8 +121,6 @@ exports.dev = series( //Dev task
 		movePDFTask,
 	),
 	browserSyncTask,
-	watchTask,
-
 );
 
 exports.build = series( //Build task
