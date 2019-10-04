@@ -1,13 +1,12 @@
 //Requires
 
 const gulp = require('gulp');
-const { src, dest } = require('gulp');
+const {src,dest,series,parallel,watch} = require('gulp');
 const panini = require('panini');
 const sass = require('gulp-sass');
 const del = require('del');
 const browserSync = require('browser-sync').create();
 const inky = require('inky');
-const fs = require('fs');
 const fse = require('fs-extra');
 const juice = require('juice');
 const config = require('./src/assets/data/config');
@@ -20,161 +19,128 @@ let emailFileName;
 //Task Functions
 
 let getName = (done) => {
-    emailFileName = fs.readdirSync('src/templates/pages/');
-    emailFileName = emailFileName.find((element) => {
-        return element.includes('.html');
-    });
-    done();
+	emailFileName = fse.readdirSync('src/templates/pages/')
+		.find((element) => element.includes('.html'));
+	done();
 }
 
 let convertPaniniTask = () => {
-    panini.refresh();
-    return gulp.src('./src/templates/pages/*.html')
-        .pipe(panini ({
-            root: './src/templates/pages/',
-            layouts: './src/templates/layout/',
-            partials: './src/templates/partials/',
-            data: './src/assets/data',
-            helpers: './src/helpers/',
-        }))
-        .pipe(inky({
-            dest: '.tmp/'
-        }));
+	panini.refresh();
+	return src('./src/templates/pages/*.html')
+		.pipe(panini({
+			root: './src/templates/pages/',
+			layouts: './src/templates/layout/',
+			partials: './src/templates/partials/',
+			data: './src/assets/data',
+			helpers: './src/helpers/',
+		}))
+		.pipe(inky({
+			dest: '.tmp/'
+		}));
 
 }
 
-let convertScssTask = (done) => {
-    gulp.src('./src/assets/css/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('./.tmp/css'));
-    done();
+let convertScssTask = () => {
+	return src('./src/assets/css/*.scss')
+		.pipe(sass().on('error', sass.logError))
+		.pipe(dest('./.tmp/css'));
 }
 
-let moveImagesTask = (done) => {
-    gulp.src('./src/assets/img/*.*')
-        .pipe(gulp.dest('./.tmp/img'));
-    done();
+let moveImagesTask = () => {
+	return src('./src/assets/img/*.*')
+		.pipe(dest('./.tmp/img'));
 }
 
-let movePDFTask = (done) => {
-    gulp.src('./src/assets/img/*.pdf')
-        .pipe(gulp.dest('./.tmp/pdf'));
-    done();
+let movePDFTask = () => {
+	return src('./src/assets/img/*.pdf')
+		.pipe(dest('./.tmp/pdf'));
 }
 
 let juicify = (done) => {
 	juice.juiceFile(`./.tmp/${emailFileName}`, {}, (err, html) => {
-		console.log(err);
+		if (err) console.log(err);
 		fse.outputFile(`./.tmp/${emailName}.html`, html, (err) => {
-			if(err) {
-				return console.log(err);
-			}
-			// return console.log("The file was saved!");
+			if (err) return console.log(err);
 			done();
 		});
 	});
 };
 
-let clearDist = (done) => {
-    del.sync('./dist');
-    done();
-}
+let clearDist = () => del('./dist');
 
-let clearTemp = (done) => {
+let clearTemp = () => del('./.tmp');
 
-		del.sync('./.tmp');
+let deleteOld = () => del(['./.tmp/css', `./.tmp/${emailFileName}`]);
 
-
-
-	done();
-}
-let clearTemp2 = (done) => {
-	setTimeout(() => {
-		del.sync('./.tmp');
-	}, 500);
-
-
-
-
-done();
-}
-
-let deleteOld = (done) => {
-
-	del.sync(['./.tmp/css',`./.tmp/${emailFileName}`]);
-
-
-    done();
-}
-
-let moveHtmlToDist = (done) => {
-	return gulp.src(`./.tmp/${emailName}.html`)
-		.pipe(gulp.dest('./dist/'));
+let moveHtmlToDist = () => {
+	return src(`./.tmp/${emailName}.html`)
+		.pipe(dest('./dist/'));
 }
 
 let moveFoldersToDist = () => {
-	return gulp.src(`./.tmp/**/*.*`)
-		.pipe(gulp.dest('./dist/'));
+	return src(`./.tmp/**/*.*`)
+		.pipe(dest('./dist/'));
 
 }
 
 let browserSyncReloadTask = (done) => {
-    browserSync.reload();
-    done();
-}
-
-let browserSyncTask = (done) => {
-    browserSync.init({
-        server: {
-            baseDir: './.tmp',
-            index: `${emailFileName}`,
-            notify: false
-        }
-    });
-    done();
-}
-
-let watchTask = (done) => {
-    gulp.watch('./src').on('change',
-    gulp.series(
-        clearTemp,
-        convertPaniniTask,
-        convertScssTask,
-        moveImagesTask,
-		browserSyncReloadTask));
+	browserSync.reload();
 	done();
+}
+
+let browserSyncTask = () => {
+	browserSync.init({
+		server: {
+			baseDir: './.tmp',
+			index: `${emailFileName}`,
+			notify: false
+		}
+	});
+
+}
+
+let watchTask = () => {
+	watch('./src').on('change',
+		series(
+			clearTemp,
+			convertPaniniTask,
+			convertScssTask,
+			moveImagesTask,
+			browserSyncReloadTask
+		)
+	);
 }
 
 //Tasks
 
-exports.dev = gulp.series( //Dev task
-    getName,
-    clearDist,
-    clearTemp,
-    gulp.parallel(
-        convertPaniniTask,
-        convertScssTask,
-        moveImagesTask,
-        movePDFTask,
+exports.dev = series( //Dev task
+	getName,
+	clearDist,
+	clearTemp,
+	parallel(
+		convertPaniniTask,
+		convertScssTask,
+		moveImagesTask,
+		movePDFTask,
 	),
+	browserSyncTask,
 	watchTask,
-    browserSyncTask,
 
 );
 
-exports.build = gulp.series( //Build task
-    getName,
-    clearDist,
-    clearTemp,
-    gulp.parallel(
-        convertPaniniTask,
-        convertScssTask,
-        moveImagesTask,
-        movePDFTask,
-    ),
-    juicify,
-    deleteOld,
-    moveHtmlToDist,
+exports.build = series( //Build task
+	getName,
+	clearDist,
+	clearTemp,
+	parallel(
+		convertPaniniTask,
+		convertScssTask,
+		moveImagesTask,
+		movePDFTask,
+	),
+	juicify,
+	deleteOld,
+	moveHtmlToDist,
 	moveFoldersToDist,
-	clearTemp2
+	clearTemp
 );
