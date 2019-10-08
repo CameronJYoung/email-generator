@@ -1,3 +1,32 @@
+.header {
+  width: 100%;
+  background: #fec41b; }
+
+.logo-size {
+  width: 188px;
+  height: auto; }
+
+.main-body {
+  background: white;
+  width: 100%;
+  height: auto;
+  text-align: left; }
+
+.text-normal {
+  color: #5e5e5e;
+  font-family: Helvetica;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: left;
+  font-weight: normal; }
+
+.betmiga-yellow {
+  background: #fec41b;
+  width: 100%; }
+
+.padding-zero th {
+  padding: 0; }
+
 #outlook a {
   padding: 0; }
 
@@ -16,7 +45,8 @@ body, table, td, p, a, li, blockquote {
 
 table, td {
   mso-table-lspace: 0pt;
-  mso-table-rspace: 0pt; }
+  mso-table-rspace: 0pt;
+  border-spacing: 0; }
 
 img {
   -ms-interpolation-mode: bicubic; }
@@ -74,13 +104,8 @@ td {
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important; }
 
-.footer-logo {
-  padding: 55px 0px 0px 0px; }
-
 /* Mobile overides */
 @media only screen and (max-width: 480px) {
-  .footer-logo {
-    padding: 0px 0px 0px 0px; }
   body, table, td, p, a, li, blockquote {
     -webkit-text-size-adjust: none !important; }
   body {

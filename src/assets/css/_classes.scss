@@ -1,0 +1,38 @@
+@import 'settings.scss';
+
+
+
+.header{
+	width: 100%;
+	background: #fec41b;
+}
+
+.logo-size{
+	width: 188px;
+	height: auto;
+}
+
+.main-body{
+	background: white;
+	width: 100%;
+	height: auto;
+	text-align: left;
+}
+
+.text-normal{
+	color: #5e5e5e;
+	font-family: Helvetica;
+	font-size: 16px;
+	line-height: 20px;
+	text-align: left;
+	font-weight: normal;
+}
+
+.betmiga-yellow{
+	background: #fec41b;
+	width: 100%;
+}
+
+.padding-zero th{
+	padding: 0;
+}

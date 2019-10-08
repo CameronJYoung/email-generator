@@ -1,8 +1,9 @@
+@import 'classes.scss';
 #outlook a { padding:0; }
 .ReadMsgBody { width:100%; } .ExternalClass { width:100%; }
 .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div { line-height: 100%; }
 body, table, td, p, a, li, blockquote { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
-table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; }
+table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; border-spacing: 0;}
 img { -ms-interpolation-mode:bicubic; }
 
 body { margin:0; padding:0; background: #dedede;}
@@ -23,17 +24,8 @@ td {
 	-webkit-font-smoothing: antialiased !important;
 }
 
-.footer-logo{
-	padding:55px 0px 0px 0px;
-}
-
 /* Mobile overides */
 @media only screen and (max-width: 480px){
-
-	.footer-logo{
-		padding:0px 0px 0px 0px;
-	}
-
 	body, table, td, p, a, li, blockquote {
 		-webkit-text-size-adjust:none !important;
 	}
