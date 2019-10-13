@@ -16,6 +16,7 @@
     "inky": "^1.3.7"
   },
   "dependencies": {
+    "front-matter": "^3.0.2",
     "fs-extra": "^8.1.0",
     "juice": "^5.2.0",
     "panini": "^1.6.3"

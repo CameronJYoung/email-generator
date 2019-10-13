@@ -1,0 +1,6 @@
+{{#ifequal type 'static'}}
+	{{config.type.STA.job-code}}
+{{/ifequal}}
+{{#ifequal type 'dynamic'}}
+	{{config.type.DYN.job-code}}
+{{/ifequal}}

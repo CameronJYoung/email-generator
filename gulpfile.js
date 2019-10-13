@@ -7,20 +7,45 @@ const sass = require('gulp-sass');
 const del = require('del');
 const browserSync = require('browser-sync').create();
 const inky = require('inky');
-const fse = require('fs-extra');
+const fs = require('fs-extra');
 const juice = require('juice');
-const config = require('./src/assets/data/config');
+const fm = require('front-matter');
 
 //Variables
 
-let emailName = `${config.brand}-${config.country}-${config.language}-${config.type}-${config.name}-${config.version}`;
+let frontmatterData;
+let emailName;
 let emailFileName;
+let typePath;
+
+// utility functions
+
+let getFrontMatter = (done) => {
+	fs.readFile(`./src/templates/pages/${emailFileName}`, 'utf8', (err, data) => {
+		if (err) throw err;
+
+		frontmatterData = (fm(data)).attributes;
+		emailName = `${frontmatterData.brand}-${frontmatterData.country}-${frontmatterData.language}-${frontmatterData.type}-${frontmatterData.name}-${frontmatterData.version}`;
+		checkType(frontmatterData.type);
+		done();
+	});
+}
+
+let checkType = (type) => {
+	console.log(type)
+	if (type === 'dynamic') {
+		typePath = './dist/DYN';
+	} else if (type === 'static') {
+		typePath = './dist/STA';
+	}
+}
 
 //Task Functions
 
 let getName = (done) => {
-	emailFileName = fse.readdirSync('src/templates/pages/')
+	emailFileName = fs.readdirSync('src/templates/pages/')
 		.find((element) => element.includes('.html'));
+
 	done();
 }
 
@@ -59,7 +84,7 @@ let movePDFTask = () => {
 let juicify = (done) => {
 	juice.juiceFile(`./.tmp/${emailFileName}`, {}, (err, html) => {
 		if (err) console.log(err);
-		fse.outputFile(`./.tmp/${emailName}.html`, html, (err) => {
+		fs.outputFile(`./.tmp/${emailName}.html`, html, (err) => {
 			if (err) return console.log(err);
 			done();
 		});
@@ -74,12 +99,13 @@ let deleteOld = () => del(['./.tmp/css', `./.tmp/${emailFileName}`]);
 
 let moveHtmlToDist = () => {
 	return src(`./.tmp/${emailName}.html`)
-		.pipe(dest('./dist/'));
+		.pipe(dest(`${typePath}`));
+
 }
 
 let moveFoldersToDist = () => {
 	return src(`./.tmp/**/*.*`)
-		.pipe(dest('./dist/'));
+		.pipe(dest(`${typePath}`));
 
 }
 
@@ -112,6 +138,7 @@ let browserSyncTask = () => {
 
 exports.dev = series( //Dev task
 	getName,
+	getFrontMatter,
 	clearDist,
 	clearTemp,
 	parallel(
@@ -125,6 +152,7 @@ exports.dev = series( //Dev task
 
 exports.build = series( //Build task
 	getName,
+	getFrontMatter,
 	clearDist,
 	clearTemp,
 	parallel(
@@ -139,3 +167,5 @@ exports.build = series( //Build task
 	moveFoldersToDist,
 	clearTemp
 );
+
+exports.test = series(getName,getFrontMatter);
